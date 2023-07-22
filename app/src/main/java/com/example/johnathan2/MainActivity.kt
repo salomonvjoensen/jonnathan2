@@ -16,6 +16,10 @@ import android.widget.TextView
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
+import android.util.Log
+import androidx.recyclerview.widget.GridLayoutManager
+
 //import com.google.android.material.snackbar.Snackbar
 
 /*
@@ -70,8 +74,9 @@ class MainActivity : ComponentActivity() {
         val resultTextView: TextView = findViewById(R.id.textViewResult)
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this, 1)
         recyclerView.adapter = ItemAdapter(itemList)
+        Log.d("MainActivity", "Initial adapter item count: ${itemList.size}")
 
         calculateButton.setOnClickListener {
             // Get the values entered by the user
@@ -96,6 +101,9 @@ class MainActivity : ComponentActivity() {
             // Add the new item to the list
             item = Item(itemNameText, price, wood, totalSqMeters)
             itemList.add(item)
+
+            // Log the size of the itemList
+            Log.d("MainActivity", "Item list size: ${itemList.size}")
 
             // Notify the adapter that the data set has changed
             (recyclerView.adapter as ItemAdapter).notifyDataSetChanged()
