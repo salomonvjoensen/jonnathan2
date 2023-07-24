@@ -4,11 +4,12 @@ import androidx.activity.ComponentActivity
 
 import android.os.Bundle
 import android.widget.Button
+import android.content.res.ColorStateList
 import android.widget.EditText
 import android.widget.TextView
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.text.TextWatcher
+import android.text.Editable
 
 import android.util.Log
 import android.graphics.Canvas
@@ -16,6 +17,7 @@ import android.graphics.Paint
 import android.graphics.Color
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import kotlin.math.round
 
 class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
@@ -26,13 +28,18 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
     private lateinit var item: Item
     private var itemList: MutableList<Item> = mutableListOf()
+    private lateinit var sharedPreferencesManager: SharedPreferencesManager
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    //private lateinit var appBarConfiguration: AppBarConfiguration
     //private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home)
+
+        // Get itemList from storage
+        sharedPreferencesManager = SharedPreferencesManager(this)
+        itemList = sharedPreferencesManager.loadItemList()
 
         priceEditText = findViewById(R.id.editTextPrice)
         woodEditText = findViewById(R.id.editTextWood)
@@ -40,6 +47,9 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         totalSqMetersEditText = findViewById(R.id.editTextTotalSq)
 
         val calculateButton: Button = findViewById(R.id.buttonCalculate)
+        // Check form validity and set button state
+        calculateButton.isEnabled = isFormValid()
+
         val resultTextView: TextView = findViewById(R.id.textViewResult)
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
@@ -52,8 +62,36 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 woodEditText.setText(item.width.toString())
                 itemNameEditText.setText(item.itemName)
                 totalSqMetersEditText.setText(item.totalPrice.toString())
+
+                // Set the result in the TextView
+                resultTextView.text =
+                    "Result: ${"%.2f".format(item.priceInMeters / (item.width / 100))} DKK\nTotal: ${"%.2f".format(item.totalPrice)} DKK"
             }
         }
+
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // No action needed here
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                // No action needed here
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                calculateButton.isEnabled = isFormValid()
+                if (isFormValid()) {
+                    calculateButton.backgroundTintList = ColorStateList.valueOf(Color.GREEN)
+                } else {
+                    calculateButton.backgroundTintList = null
+                }
+            }
+        }
+
+        priceEditText.addTextChangedListener(textWatcher)
+        woodEditText.addTextChangedListener(textWatcher)
+        itemNameEditText.addTextChangedListener(textWatcher)
+        totalSqMetersEditText.addTextChangedListener(textWatcher)
 
         recyclerView.layoutManager = GridLayoutManager(this, 1)
         recyclerView.adapter = ItemAdapter(itemList, onItemClickListener)
@@ -72,6 +110,9 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 val position = viewHolder.adapterPosition
                 itemList.removeAt(position)
                 recyclerView.adapter?.notifyItemRemoved(position)
+
+                // Save the updated list
+                sharedPreferencesManager.saveItemList(itemList)
             }
 
             override fun onChildDraw(
@@ -127,7 +168,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 "Result: ${"%.2f".format(result)} DKK\nTotal: ${"%.2f".format(total)} DKK"
 
             // Add the new item to the list
-            item = Item(itemNameText, price, wood, totalSqMeters)
+            item = Item(itemNameText, price, wood, round(total * 100) / 100)
             itemList.add(item)
 
             // Log the size of the itemList
@@ -135,6 +176,9 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
             // Notify the adapter that the data set has changed
             (recyclerView.adapter as ItemAdapter).notifyDataSetChanged()
+
+            // Save the updated list
+            sharedPreferencesManager.saveItemList(itemList)
         }
 
     }
@@ -144,5 +188,12 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         woodEditText.setText(item.width.toString())
         itemNameEditText.setText(item.itemName)
         totalSqMetersEditText.setText(item.totalPrice.toString())
+    }
+
+    private fun isFormValid(): Boolean {
+        return priceEditText.text.isNotEmpty() &&
+                woodEditText.text.isNotEmpty() &&
+                itemNameEditText.text.isNotEmpty() &&
+                totalSqMetersEditText.text.isNotEmpty()
     }
 }
