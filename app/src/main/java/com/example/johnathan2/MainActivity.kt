@@ -61,8 +61,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 priceEditText.setText(item.priceInMeters.toString())
                 woodEditText.setText(item.width.toString())
                 itemNameEditText.setText(item.itemName)
-                totalSqMetersEditText.setText(item.totalPrice.toString())
-
+                totalSqMetersEditText.setText(item.totalSqMeters.toString())
                 // Set the result in the TextView
                 resultTextView.text =
                     "Result: ${"%.2f".format(item.priceInMeters / (item.width / 100))} DKK\nTotal: ${"%.2f".format(item.totalPrice)} DKK"
@@ -168,7 +167,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 "Result: ${"%.2f".format(result)} DKK\nTotal: ${"%.2f".format(total)} DKK"
 
             // Add the new item to the list
-            item = Item(itemNameText, price, wood, round(total * 100) / 100)
+            item = Item(itemNameText, price, wood, totalSqMeters, round(total * 100) / 100)
             itemList.add(item)
 
             // Log the size of the itemList

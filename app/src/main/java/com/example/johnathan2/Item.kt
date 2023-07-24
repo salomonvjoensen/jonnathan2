@@ -1,5 +1,11 @@
 package com.example.johnathan2
 
-class Item(var itemName: String, var priceInMeters: Double, var width: Double, var totalPrice: Double) {
+class Item(
+    var itemName: String,
+    var priceInMeters: Double,
+    var width: Double,
+    var totalSqMeters: Double,
+    var totalPrice: Double
+) {
 
 }
