@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ItemAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+class ItemAdapter(
+    private val items: MutableList<Item>,
+    private val listener: OnItemClickListener
+) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
@@ -24,6 +27,10 @@ class ItemAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<I
         val item = items[position]
         itemNameTextView.text = item.itemName
         itemTotalPriceTextView.text = item.totalPrice.toString()
+
+        holder.view.setOnClickListener {
+            listener.onItemClick(item)
+        }
     }
 
 
@@ -31,5 +38,10 @@ class ItemAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<I
         Log.d("ItemAdapter", "Item count requested, count is ${items.size}")
         return items.size
     }
+
+    interface OnItemClickListener {
+        fun onItemClick(item: Item)
+    }
+
 }
 

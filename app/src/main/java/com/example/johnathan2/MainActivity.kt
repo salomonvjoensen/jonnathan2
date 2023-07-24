@@ -1,13 +1,6 @@
 package com.example.johnathan2
 
 import androidx.activity.ComponentActivity
-/*
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.johnathan2.ui.theme.Johnathan2Theme
-*/
 
 import android.os.Bundle
 import android.widget.Button
@@ -18,31 +11,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import android.util.Log
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Color
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 
-//import com.google.android.material.snackbar.Snackbar
+class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
-/*
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            Johnathan2Theme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
-            }
-        }
-    }
-}
-*/
-
-
-class MainActivity : ComponentActivity() {
+    private lateinit var priceEditText: EditText
+    private lateinit var woodEditText: EditText
+    private lateinit var itemNameEditText: EditText
+    private lateinit var totalSqMetersEditText: EditText
 
     private lateinit var item: Item
     private var itemList: MutableList<Item> = mutableListOf()
@@ -52,30 +32,78 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        /*
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.appBarMain.toolbar)
-
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-        */
         setContentView(R.layout.home)
 
+        priceEditText = findViewById(R.id.editTextPrice)
+        woodEditText = findViewById(R.id.editTextWood)
+        itemNameEditText = findViewById(R.id.editItemName)
+        totalSqMetersEditText = findViewById(R.id.editTextTotalSq)
+
         val calculateButton: Button = findViewById(R.id.buttonCalculate)
-        val priceEditText: EditText = findViewById(R.id.editTextPrice)
-        val woodEditText: EditText = findViewById(R.id.editTextWood)
-        val itemNameEditText: EditText = findViewById(R.id.editItemName)
-        var totalSqMetersEditText: EditText = findViewById(R.id.editTextTotalSq)
         val resultTextView: TextView = findViewById(R.id.textViewResult)
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 1)
-        recyclerView.adapter = ItemAdapter(itemList)
+
+        // Define the OnItemClickListener
+        val onItemClickListener = object : ItemAdapter.OnItemClickListener {
+            override fun onItemClick(item: Item) {
+                priceEditText.setText(item.priceInMeters.toString())
+                woodEditText.setText(item.width.toString())
+                itemNameEditText.setText(item.itemName)
+                totalSqMetersEditText.setText(item.totalPrice.toString())
+            }
+        }
+
+        recyclerView.layoutManager = GridLayoutManager(this, 1)
+        recyclerView.adapter = ItemAdapter(itemList, onItemClickListener)
+
+        // Add the ItemTouchHelper code here
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false // we are not implementing move functionality here
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                itemList.removeAt(position)
+                recyclerView.adapter?.notifyItemRemoved(position)
+            }
+
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    val itemView = viewHolder.itemView
+                    if (dX < 0) { // swipe left
+                        val paint = Paint()
+                        paint.color = Color.RED
+                        c.drawRect(
+                            itemView.right.toFloat() + dX,
+                            itemView.top.toFloat(),
+                            itemView.right.toFloat(),
+                            itemView.bottom.toFloat(),
+                            paint
+                        )
+                    }
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
         Log.d("MainActivity", "Initial adapter item count: ${itemList.size}")
 
         calculateButton.setOnClickListener {
@@ -110,21 +138,11 @@ class MainActivity : ComponentActivity() {
         }
 
     }
-}
-/*
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Johnathan2Theme {
-        Greeting("Android")
+    override fun onItemClick(item: Item) {
+        priceEditText.setText(item.priceInMeters.toString())
+        woodEditText.setText(item.width.toString())
+        itemNameEditText.setText(item.itemName)
+        totalSqMetersEditText.setText(item.totalPrice.toString())
     }
 }
-*/
