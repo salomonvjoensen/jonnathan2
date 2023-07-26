@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ItemAdapter(
-    private val items: MutableList<Item>,
-    private val listener: OnItemClickListener
-) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+        private val items: MutableList<Item>,
+        private val listener: OnItemClickListener
+    ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 

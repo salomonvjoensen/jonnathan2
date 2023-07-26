@@ -15,8 +15,11 @@ import android.util.Log
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Color
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import android.view.Gravity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import java.util.Timer
@@ -25,6 +28,7 @@ import kotlin.math.round
 
 class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
+    private lateinit var titleTextView: TextView
     private lateinit var priceEditText: EditText
     private lateinit var woodEditText: EditText
     private lateinit var itemNameEditText: EditText
@@ -45,6 +49,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         sharedPreferencesManager = SharedPreferencesManager(this)
         itemList = sharedPreferencesManager.loadItemList()
 
+        titleTextView = findViewById(R.id.textViewTitle)
         priceEditText = findViewById(R.id.editTextPrice)
         woodEditText = findViewById(R.id.editTextWood)
         itemNameEditText = findViewById(R.id.editItemName)
@@ -53,6 +58,8 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         val calculateButton: Button = findViewById(R.id.buttonCalculate)
         // Check form validity and set button state
         calculateButton.isEnabled = isFormValid()
+
+        val changeButton: Button = findViewById(R.id.buttonChange)
 
         val resultTextView: TextView = findViewById(R.id.textViewResult)
         val totalTextView: TextView = findViewById(R.id.textViewTotal)
@@ -222,6 +229,10 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         woodEditText.setText(item.width.toString())
         itemNameEditText.setText(item.itemName)
         totalSqMetersEditText.setText(item.totalPrice.toString())
+    }
+
+    fun changeButtonIsVisible(button: Button) {
+        button.isVisible
     }
 
     private fun isFormValid(): Boolean {
