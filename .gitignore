@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/release/app-release.apk
+/app/release/jonathan.apk
+/app/release/output-metadata.json
+/signedkeyforjonathan.jks
