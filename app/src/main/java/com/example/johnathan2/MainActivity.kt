@@ -15,12 +15,20 @@ import android.util.Log
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Color
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
+import android.view.Gravity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import java.util.Timer
+import kotlin.concurrent.timerTask
 import kotlin.math.round
 
 class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
+    private lateinit var titleTextView: TextView
     private lateinit var priceEditText: EditText
     private lateinit var woodEditText: EditText
     private lateinit var itemNameEditText: EditText
@@ -41,6 +49,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         sharedPreferencesManager = SharedPreferencesManager(this)
         itemList = sharedPreferencesManager.loadItemList()
 
+        titleTextView = findViewById(R.id.textViewTitle)
         priceEditText = findViewById(R.id.editTextPrice)
         woodEditText = findViewById(R.id.editTextWood)
         itemNameEditText = findViewById(R.id.editItemName)
@@ -50,10 +59,17 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         // Check form validity and set button state
         calculateButton.isEnabled = isFormValid()
 
+        val changeButton: Button = findViewById(R.id.buttonChange)
+
         val resultTextView: TextView = findViewById(R.id.textViewResult)
+        val totalTextView: TextView = findViewById(R.id.textViewTotal)
+
+        var totaltotal: String = calculateTotalTotal(itemList)
+        totalTextView.text = totaltotal
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = GridLayoutManager(this, 1)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        recyclerView.isVerticalScrollBarEnabled = true
 
         // Define the OnItemClickListener
         val onItemClickListener = object : ItemAdapter.OnItemClickListener {
@@ -112,6 +128,9 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
                 // Save the updated list
                 sharedPreferencesManager.saveItemList(itemList)
+
+                totaltotal = calculateTotalTotal(itemList)
+                totalTextView.text = totaltotal
             }
 
             override fun onChildDraw(
@@ -135,6 +154,18 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                             itemView.bottom.toFloat(),
                             paint
                         )
+
+                        val textPaint = Paint()
+                        textPaint.color = Color.WHITE
+                        textPaint.textSize = 55f
+                        val text = "Delete"
+                        val textX = itemView.right.toFloat() - textPaint.measureText(text) - 30
+
+                        // Calculate the vertical position to center the text
+                        val textY = itemView.top.toFloat() + (itemView.height + textPaint.textSize) / 2 - 8
+
+                        resultTextView.gravity = Gravity.CENTER_VERTICAL
+                        c.drawText(text, textX, textY, textPaint)
                     }
                 }
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
@@ -168,7 +199,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
             // Add the new item to the list
             item = Item(itemNameText, price, wood, totalSqMeters, round(total * 100) / 100)
-            itemList.add(item)
+            itemList.add(0, item)
 
             // Log the size of the itemList
             Log.d("MainActivity", "Item list size: ${itemList.size}")
@@ -178,8 +209,19 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
             // Save the updated list
             sharedPreferencesManager.saveItemList(itemList)
+
+            totaltotal = calculateTotalTotal(itemList)
+            totalTextView.text = totaltotal
         }
 
+    }
+
+    fun calculateTotalTotal(itemList: MutableList<Item>): String {
+        var totaltotal = 0.0
+        for (item in itemList) {
+            totaltotal += item.totalPrice
+        }
+        return "Total: ${"%.2f".format(totaltotal)} DKK"
     }
 
     override fun onItemClick(item: Item) {
@@ -187,6 +229,10 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         woodEditText.setText(item.width.toString())
         itemNameEditText.setText(item.itemName)
         totalSqMetersEditText.setText(item.totalPrice.toString())
+    }
+
+    fun changeButtonIsVisible(button: Button) {
+        button.isVisible
     }
 
     private fun isFormValid(): Boolean {
