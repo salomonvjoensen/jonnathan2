@@ -1,5 +1,8 @@
 package com.example.johnathan2
 
+import SimpleItemTouchHelperCallback
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
 import androidx.activity.ComponentActivity
 
 import android.os.Bundle
@@ -19,6 +22,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import java.util.Collections
 import kotlin.math.round
 
 class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
@@ -34,6 +38,10 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
 
     private var selectedItemIndex: Int? = null
+
+    override fun onItemMove(item: Item, fromPosition: Int, toPosition: Int) {
+        // Handle item move
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,8 +79,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.isVerticalScrollBarEnabled = true
 
-        // Define the OnItemClickListener
-        val onItemClickListener = object : ItemAdapter.OnItemClickListener {
+        val itemAdapter = ItemAdapter(itemList, object : ItemAdapter.OnItemClickListener {
             override fun onItemClick(item: Item) {
                 priceEditText.setText(item.priceInMeters.toString())
                 woodEditText.setText(item.width.toString())
@@ -88,7 +95,13 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 resultTextView.text =
                     "Result: ${"%.2f".format(item.priceInMeters / (item.width / 100))} DKK\nTotal: ${"%.2f".format(item.totalPrice)} DKK"
             }
-        }
+
+            override fun onItemMove(item: Item, fromPosition: Int, toPosition: Int) {
+                // Handle item move
+            }
+        })
+
+        recyclerView.adapter = itemAdapter
 
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -115,16 +128,29 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         totalSqMetersEditText.addTextChangedListener(textWatcher)
 
         recyclerView.layoutManager = GridLayoutManager(this, 1)
-        recyclerView.adapter = ItemAdapter(itemList, onItemClickListener)
+        recyclerView.adapter = itemAdapter
+
+        val callback = SimpleItemTouchHelperCallback(itemAdapter)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(recyclerView)
 
         // Add the ItemTouchHelper code here
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
+
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                return false // we are not implementing move functionality here
+                val fromPosition = viewHolder.adapterPosition
+                val toPosition = target.adapterPosition
+                Collections.swap(itemList, fromPosition, toPosition)
+                recyclerView.adapter?.notifyItemMoved(fromPosition, toPosition)
+
+                // Save the updated list after reordering
+                sharedPreferencesManager.saveItemList(itemList)
+
+                return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {

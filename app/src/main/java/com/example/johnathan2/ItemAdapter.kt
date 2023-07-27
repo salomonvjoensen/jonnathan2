@@ -6,11 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.util.Collections
+
+interface ItemTouchHelperAdapter {
+    fun onItemMove(fromPosition: Int, toPosition: Int)
+}
 
 class ItemAdapter(
         private val items: MutableList<Item>,
         private val listener: OnItemClickListener
-    ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
+    ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), ItemTouchHelperAdapter {
+
 
     class ItemViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
@@ -41,6 +47,13 @@ class ItemAdapter(
 
     interface OnItemClickListener {
         fun onItemClick(item: Item)
+        fun onItemMove(item: Item, fromPosition: Int, toPosition: Int)
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        Collections.swap(items, fromPosition, toPosition)
+        notifyItemMoved(fromPosition, toPosition)
+        listener.onItemMove(items[toPosition], fromPosition, toPosition)
     }
 
 }
