@@ -10,20 +10,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.text.TextWatcher
 import android.text.Editable
-
 import android.util.Log
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Color
-import android.text.SpannableString
-import android.text.style.RelativeSizeSpan
 import android.view.Gravity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.isVisible
+import android.view.MotionEvent
+import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import java.util.Timer
-import kotlin.concurrent.timerTask
 import kotlin.math.round
 
 class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
@@ -38,8 +33,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
     private var itemList: MutableList<Item> = mutableListOf()
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
 
-    //private lateinit var appBarConfiguration: AppBarConfiguration
-    //private lateinit var binding: ActivityMainBinding
+    private var selectedItemIndex: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,11 +49,17 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         itemNameEditText = findViewById(R.id.editItemName)
         totalSqMetersEditText = findViewById(R.id.editTextTotalSq)
 
+        setupClearButtonWithAction(priceEditText)
+        setupClearButtonWithAction(woodEditText)
+        setupClearButtonWithAction(itemNameEditText)
+        setupClearButtonWithAction(totalSqMetersEditText)
+
         val calculateButton: Button = findViewById(R.id.buttonCalculate)
         // Check form validity and set button state
         calculateButton.isEnabled = isFormValid()
 
         val changeButton: Button = findViewById(R.id.buttonChange)
+        //changeButton.visibility = View.VISIBLE
 
         val resultTextView: TextView = findViewById(R.id.textViewResult)
         val totalTextView: TextView = findViewById(R.id.textViewTotal)
@@ -78,6 +78,12 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 woodEditText.setText(item.width.toString())
                 itemNameEditText.setText(item.itemName)
                 totalSqMetersEditText.setText(item.totalSqMeters.toString())
+
+                changeButtonIsVisible(changeButton)
+
+                // Find the index of the clicked item
+                selectedItemIndex = itemList.indexOf(item)
+
                 // Set the result in the TextView
                 resultTextView.text =
                     "Result: ${"%.2f".format(item.priceInMeters / (item.width / 100))} DKK\nTotal: ${"%.2f".format(item.totalPrice)} DKK"
@@ -212,8 +218,47 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
             totaltotal = calculateTotalTotal(itemList)
             totalTextView.text = totaltotal
+
+            priceEditText.setText("")
+            woodEditText.setText("")
+            totalSqMetersEditText.setText("")
+            itemNameEditText.setText("")
+            resultTextView.text = "Result: "
         }
 
+        changeButton.setOnClickListener {
+            // Check if an item is selected
+            if (selectedItemIndex != null) {
+                // Get the selected item
+                val selectedItem = itemList[selectedItemIndex!!]
+
+                // Update the selected item
+                selectedItem.priceInMeters = priceEditText.text.toString().toDouble()
+                selectedItem.width = woodEditText.text.toString().toDouble()
+                selectedItem.totalSqMeters = totalSqMetersEditText.text.toString().toDouble()
+                selectedItem.itemName = itemNameEditText.text.toString()
+
+                // Perform the calculation
+                val result: Double = selectedItem.priceInMeters / (selectedItem.width / 100)
+                val total: Double = result * selectedItem.totalSqMeters
+
+                selectedItem.totalPrice = round(total * 100) / 100
+
+                // Notify the adapter that the data set has changed
+                (recyclerView.adapter as ItemAdapter).notifyDataSetChanged()
+
+                // Save the updated list
+                sharedPreferencesManager.saveItemList(itemList)
+
+                changeButton.visibility = View.INVISIBLE
+
+                priceEditText.setText("")
+                woodEditText.setText("")
+                totalSqMetersEditText.setText("")
+                itemNameEditText.setText("")
+                resultTextView.text = "Result: "
+            }
+        }
     }
 
     fun calculateTotalTotal(itemList: MutableList<Item>): String {
@@ -232,7 +277,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
     }
 
     fun changeButtonIsVisible(button: Button) {
-        button.isVisible
+        button.visibility = View.VISIBLE
     }
 
     private fun isFormValid(): Boolean {
@@ -241,4 +286,48 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 itemNameEditText.text.isNotEmpty() &&
                 totalSqMetersEditText.text.isNotEmpty()
     }
+
+    private fun setupClearButtonWithAction(editText: EditText) {
+        // Hide the 'X' initially
+        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+
+        editText.setOnTouchListener { v, event ->
+            val DRAWABLE_RIGHT = 2
+
+            if (event.action == MotionEvent.ACTION_UP) {
+                // Check if the drawable exists
+                if (editText.compoundDrawables[DRAWABLE_RIGHT] != null) {
+                    if (event.rawX >= (editText.right - editText.compoundDrawables[DRAWABLE_RIGHT].bounds.width())) {
+                        // Clear the text and hide the 'X'
+                        editText.setText("")
+                        editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                        return@setOnTouchListener true
+                    }
+                }
+            }
+            return@setOnTouchListener false
+        }
+
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                if (s.isNotEmpty()) {
+                    // Get the custom 'X' drawable
+                    val drawable = resources.getDrawable(R.drawable.ic_clear, null)
+                    if (drawable != null) {
+                        // Show the 'X'
+                        editText.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
+                    }
+                } else {
+                    // Hide the 'X'
+                    editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                }
+            }
+
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
+    }
+
 }
