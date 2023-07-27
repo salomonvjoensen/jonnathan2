@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
@@ -96,7 +95,6 @@
             android:layout_height="50dp"
             android:hint="Total square meters"
             android:inputType="numberDecimal"
-            android:text="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -155,6 +153,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:scrollbars="vertical"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constrainedHeight="true"
