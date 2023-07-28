@@ -145,8 +145,8 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                val fromPosition = viewHolder.adapterPosition
-                val toPosition = target.adapterPosition
+                val fromPosition = viewHolder.bindingAdapterPosition
+                val toPosition = target.bindingAdapterPosition
                 Collections.swap(itemList, fromPosition, toPosition)
                 recyclerView.adapter?.notifyItemMoved(fromPosition, toPosition)
 
@@ -157,7 +157,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.bindingAdapterPosition
                 itemList.removeAt(position)
                 recyclerView.adapter?.notifyItemRemoved(position)
 
@@ -217,12 +217,12 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
             val priceText: String = priceEditText.text.toString()
             val woodText: String = woodEditText.text.toString()
             val itemNameText: String = itemNameEditText.text.toString()
-            var totalSqMetersText: String = totalSqMetersEditText.text.toString()
+            val totalSqMetersText: String = totalSqMetersEditText.text.toString()
 
             // Convert the input to numbers
             val price: Double = priceText.toDouble()
             val wood: Double = woodText.toDouble()
-            var totalSqMeters: Double = totalSqMetersText.toDouble()
+            val totalSqMeters: Double = totalSqMetersText.toDouble()
 
             // Perform the calculation
             val result: Double = price / (wood / 100)
@@ -337,7 +337,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         // Hide the 'X' initially
         editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 
-        editText.setOnTouchListener { v, event ->
+        editText.setOnTouchListener { _, event ->
             val DRAWABLE_RIGHT = 2
 
             if (event.action == MotionEvent.ACTION_UP) {
