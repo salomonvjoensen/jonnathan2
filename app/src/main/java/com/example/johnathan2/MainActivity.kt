@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         // Check form validity and set button state
         calculateButton.isEnabled = isFormValid()
         val changeButton: Button = findViewById(R.id.buttonChange)
-        //changeButton.visibility = View.VISIBLE
+
         val emptyListButton: Button = findViewById(R.id.buttonEmptyList)
 
         // Result and total
@@ -152,6 +152,14 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
                 // Save the updated list after reordering
                 sharedPreferencesManager.saveItemList(itemList)
+
+                changeButton.visibility = View.INVISIBLE
+
+                priceEditText.setText("")
+                woodEditText.setText("")
+                totalSqMetersEditText.setText("")
+                itemNameEditText.setText("")
+                resultTextView.text = "Result: \nTotal:"
 
                 return true
             }
@@ -240,7 +248,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
             Log.d("MainActivity", "Item list size: ${itemList.size}")
 
             // Notify the adapter that the data set has changed
-            (recyclerView.adapter as ItemAdapter).notifyDataSetChanged()
+            (recyclerView.adapter as ItemAdapter).notifyItemInserted(0)
 
             // Save the updated list
             sharedPreferencesManager.saveItemList(itemList)
@@ -274,7 +282,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 selectedItem.totalPrice = round(total * 100) / 100
 
                 // Notify the adapter that the data set has changed
-                (recyclerView.adapter as ItemAdapter).notifyDataSetChanged()
+                (recyclerView.adapter as ItemAdapter).notifyItemChanged(selectedItemIndex!!)
 
                 // Save the updated list
                 sharedPreferencesManager.saveItemList(itemList)
@@ -347,12 +355,17 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                         // Clear the text and hide the 'X'
                         editText.setText("")
                         editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+
+                        // Perform a click event
+                        editText.performClick()
+
                         return@setOnTouchListener true
                     }
                 }
             }
             return@setOnTouchListener false
         }
+
 
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
