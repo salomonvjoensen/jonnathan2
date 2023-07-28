@@ -33,12 +33,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editItemName" />
+        app:layout_constraintTop_toBottomOf="@id/editItemName"
+        android:nextFocusDown="@id/editTextPrice"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/editTextPrice"
@@ -49,7 +50,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editItemName" />
+            app:layout_constraintTop_toBottomOf="@id/editItemName"
+            android:nextFocusDown="@id/editTextWood"/>
 
         <TextView
             android:id="@+id/textViewPrice"
@@ -74,7 +76,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTextPrice" />
+            app:layout_constraintTop_toBottomOf="@id/editTextPrice"
+            android:nextFocusDown="@id/editTextTotalSq" />
 
         <TextView
             android:id="@+id/textViewWood"
@@ -133,16 +136,34 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textViewResult"
-        android:layout_width="348dp"
-        android:layout_height="46dp"
-        android:text="Result: "
-        android:textSize="20sp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonCalculate" />
+    <LinearLayout
+        android:id="@+id/linearLayoutResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewResult"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_gravity="start"
+            android:layout_weight="0.85"
+            android:text="Result: "
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonCalculate" />
+
+        <Button
+            android:id="@+id/buttonEmptyList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="0.15"
+            android:text="🗑"
+            android:textSize="20dp" />
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -157,22 +178,41 @@
             android:scrollbarAlwaysDrawVerticalTrack="true"
             app:barrierAllowsGoneWidgets="false"
             app:layout_constrainedHeight="true"
-            app:layout_constraintBottom_toTopOf="@+id/textViewTotal"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutTotal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.492"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textViewTotal"
+        <LinearLayout
+            android:id="@+id/linearLayoutTotal"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="16dp"
-            android:text="Total: "
-            android:textSize="18dp"
-            android:textColor="@color/black"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recyclerView" />
+            app:layout_constraintTop_toBottomOf="@id/recyclerView"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/textViewTotal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.85"
+                android:layout_marginTop="10dp"
+                android:text="Total: "
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+            <Button
+                android:id="@+id/buttonExport"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:layout_gravity="end"
+                android:text="📤"
+                android:textSize="20dp" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

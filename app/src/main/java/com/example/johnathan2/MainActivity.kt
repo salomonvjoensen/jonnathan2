@@ -27,12 +27,16 @@ import kotlin.math.round
 
 class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
+    // Title
     private lateinit var titleTextView: TextView
+
+    // EditText
     private lateinit var priceEditText: EditText
     private lateinit var woodEditText: EditText
     private lateinit var itemNameEditText: EditText
     private lateinit var totalSqMetersEditText: EditText
 
+    // ItemList and Storage
     private lateinit var item: Item
     private var itemList: MutableList<Item> = mutableListOf()
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
@@ -51,30 +55,36 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         sharedPreferencesManager = SharedPreferencesManager(this)
         itemList = sharedPreferencesManager.loadItemList()
 
+        // Title and EditText
         titleTextView = findViewById(R.id.textViewTitle)
         priceEditText = findViewById(R.id.editTextPrice)
         woodEditText = findViewById(R.id.editTextWood)
         itemNameEditText = findViewById(R.id.editItemName)
         totalSqMetersEditText = findViewById(R.id.editTextTotalSq)
 
+        // Clear buttons
         setupClearButtonWithAction(priceEditText)
         setupClearButtonWithAction(woodEditText)
         setupClearButtonWithAction(itemNameEditText)
         setupClearButtonWithAction(totalSqMetersEditText)
 
+        // Buttons
         val calculateButton: Button = findViewById(R.id.buttonCalculate)
         // Check form validity and set button state
         calculateButton.isEnabled = isFormValid()
-
         val changeButton: Button = findViewById(R.id.buttonChange)
         //changeButton.visibility = View.VISIBLE
+        val emptyListButton: Button = findViewById(R.id.buttonEmptyList)
 
+        // Result and total
         val resultTextView: TextView = findViewById(R.id.textViewResult)
         val totalTextView: TextView = findViewById(R.id.textViewTotal)
 
+        // TotalTotal
         var totaltotal: String = calculateTotalTotal(itemList)
         totalTextView.text = totaltotal
 
+        // RecyclerView
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         recyclerView.isVerticalScrollBarEnabled = true
@@ -249,7 +259,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
             woodEditText.setText("")
             totalSqMetersEditText.setText("")
             itemNameEditText.setText("")
-            resultTextView.text = "Result: "
+            resultTextView.text = "Result: \nTotal:"
         }
 
         changeButton.setOnClickListener {
@@ -282,8 +292,25 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                 woodEditText.setText("")
                 totalSqMetersEditText.setText("")
                 itemNameEditText.setText("")
-                resultTextView.text = "Result: "
+                resultTextView.text = "Result: \nTotal:"
+
+                totaltotal = calculateTotalTotal(itemList)
+                totalTextView.text = totaltotal
             }
+        }
+
+        emptyListButton.setOnClickListener {
+            itemList.clear()
+            (recyclerView.adapter as ItemAdapter).notifyDataSetChanged()
+            sharedPreferencesManager.saveItemList(itemList)
+            totaltotal = calculateTotalTotal(itemList)
+            totalTextView.text = totaltotal
+
+            priceEditText.setText("")
+            woodEditText.setText("")
+            totalSqMetersEditText.setText("")
+            itemNameEditText.setText("")
+            resultTextView.text = "Result: \nTotal:"
         }
     }
 
@@ -348,7 +375,6 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                     editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
                 }
             }
-
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
