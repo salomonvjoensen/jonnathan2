@@ -1,10 +1,6 @@
 package com.example.johnathan2
 
-import SimpleItemTouchHelperCallback
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
 import androidx.activity.ComponentActivity
-
 import android.os.Bundle
 import android.widget.Button
 import android.content.res.ColorStateList
@@ -99,6 +95,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
             override fun onItemMove(item: Item, fromPosition: Int, toPosition: Int) {
                 // Handle item move
             }
+
         })
 
         recyclerView.adapter = itemAdapter
@@ -129,10 +126,6 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
         recyclerView.layoutManager = GridLayoutManager(this, 1)
         recyclerView.adapter = itemAdapter
-
-        val callback = SimpleItemTouchHelperCallback(itemAdapter)
-        val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(recyclerView)
 
         // Add the ItemTouchHelper code here
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
