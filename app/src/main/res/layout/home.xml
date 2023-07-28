@@ -4,31 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:importantForAutofill="noExcludeDescendants">
 
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="390dp"
         android:layout_height="wrap_content"
-        android:text="Calculateur"
+        android:text="@string/textViewTitle"
         android:textAlignment="center"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="@color/black"/>
 
     <TextView
         android:id="@+id/textViewSubtitle"
         android:layout_width="390dp"
         android:layout_height="wrap_content"
-        android:text="de le compagnon Jonathan 🔨"
+        android:text="@string/textViewSubtitle"
         android:textAlignment="center"
-        android:textSize="16dp"/>
+        android:textSize="16sp"/>
 
     <EditText
         android:id="@+id/editItemName"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:autofillHints="name"
-        android:hint="Item name"
+        android:hint="@string/EditTextItemName"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -44,7 +45,7 @@
             android:id="@+id/editTextPrice"
             android:layout_width="300dp"
             android:layout_height="50dp"
-            android:hint="Price per meter"
+            android:hint="@string/editTextPrice"
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -55,8 +56,8 @@
             android:id="@+id/textViewPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DKK/m"
-            android:textSize="18dp" />
+            android:text="@string/textViewPrice"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -69,7 +70,7 @@
             android:id="@+id/editTextWood"
             android:layout_width="300dp"
             android:layout_height="50dp"
-            android:hint="Width in cm"
+            android:hint="@string/editTextWidthInCm"
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -80,8 +81,8 @@
             android:id="@+id/textViewWood"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="cm"
-            android:textSize="18dp"/>
+            android:text="@string/textViewCm"
+            android:textSize="18sp"/>
 
     </LinearLayout>
 
@@ -93,7 +94,7 @@
             android:id="@+id/editTextTotalSq"
             android:layout_width="300dp"
             android:layout_height="50dp"
-            android:hint="Total square meters"
+            android:hint="@string/editTextTotalSquareMeters"
             android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -103,8 +104,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="amount"
-            android:textSize="18dp"/>
+            android:text="@string/textViewAmount"
+            android:textSize="18sp"/>
 
     </LinearLayout>
 
@@ -117,7 +118,7 @@
             android:id="@+id/buttonCalculate"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:text="Calculate"
+            android:text="@string/buttonCalculate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editTextTotalSq"
@@ -128,7 +129,7 @@
             android:id="@+id/buttonChange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change"
+            android:text="@string/buttonChange"
             android:visibility="invisible"/>
 
     </LinearLayout>
@@ -137,7 +138,7 @@
         android:id="@+id/textViewResult"
         android:layout_width="348dp"
         android:layout_height="46dp"
-        android:text="Result: "
+        android:text="@string/textViewResult"
         android:textSize="20sp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -168,8 +169,8 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:layout_marginTop="16dp"
-            android:text="Total: "
-            android:textSize="18dp"
+            android:text="@string/textViewTtotal"
+            android:textSize="18sp"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recyclerView" />
@@ -182,21 +183,21 @@
         android:layout_gravity="center">
         <Button
             android:id="@+id/buttonEmptyList"
-            android:text="EMPTY"
+            android:text="@string/buttonEmpty"
             android:layout_width="120dp"
             android:layout_height="match_parent">
 
         </Button>
         <Button
             android:id="@+id/buttonImport"
-            android:text="IMPORT"
+            android:text="@string/buttonImport"
             android:layout_width="120dp"
             android:layout_height="match_parent">
 
         </Button>
         <Button
             android:id="@+id/buttonExport"
-            android:text="EXPORT"
+            android:text="@string/buttonExport"
             android:layout_width="120dp"
             android:layout_height="match_parent">
 
