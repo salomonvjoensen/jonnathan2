@@ -1,5 +1,6 @@
 package com.example.johnathan2
 
+import android.app.AlertDialog
 import androidx.activity.ComponentActivity
 import android.os.Bundle
 import android.widget.Button
@@ -16,8 +17,11 @@ import android.graphics.Color
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import java.io.IOException
 import java.util.Collections
 import kotlin.math.round
 
@@ -37,7 +41,14 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
     private var itemList: MutableList<Item> = mutableListOf()
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
 
+    private var itemAdapter: ItemAdapter? = null
     private var selectedItemIndex: Int? = null
+
+    companion object {
+        private const val CREATE_FILE_REQUEST_CODE = 1
+        private const val OPEN_FILE_REQUEST_CODE = 2
+        const val OPEN_DOCUMENT_REQUEST_CODE = 1
+    }
 
     override fun onItemMove(item: Item, fromPosition: Int, toPosition: Int) {
         // Handle item move
@@ -80,12 +91,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
         var totaltotal: String = calculateTotalTotal(itemList)
         totalTextView.text = totaltotal
 
-        // RecyclerView
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-        recyclerView.isVerticalScrollBarEnabled = true
-
-        val itemAdapter = ItemAdapter(itemList, object : ItemAdapter.OnItemClickListener {
+        itemAdapter = ItemAdapter(itemList, object : ItemAdapter.OnItemClickListener {
             override fun onItemClick(item: Item) {
                 priceEditText.setText(item.priceInMeters.toString())
                 woodEditText.setText(item.width.toString())
@@ -108,6 +114,10 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
         })
 
+        // RecyclerView
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        recyclerView.isVerticalScrollBarEnabled = true
         recyclerView.adapter = itemAdapter
 
         val textWatcher = object : TextWatcher {
@@ -307,11 +317,67 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
             totaltotal = calculateTotalTotal(itemList)
             totalTextView.text = totaltotal
 
+            changeButton.visibility = View.INVISIBLE
+
             priceEditText.setText("")
             woodEditText.setText("")
             totalSqMetersEditText.setText("")
             itemNameEditText.setText("")
             resultTextView.text = "Result: \nTotal:"
+        }
+
+        val buttonExport: Button = findViewById(R.id.buttonExport)
+        val buttonImport: Button = findViewById(R.id.buttonImport)
+
+        buttonExport.setOnClickListener {
+            // Launch the create file activity
+            createFileLauncher.launch("export")
+        }
+
+        val openDocument = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let {
+                try {
+                    contentResolver.openInputStream(it)?.use { inputStream ->
+                        inputStream.bufferedReader().use { reader ->
+                            // Clear the current list
+                            itemList.clear()
+
+                            val header = reader.readLine()
+                            if (header != "Item Name,Price,Width,Total Sq Meters,Total Price") {
+                                throw IOException("Invalid file format")
+                            }
+                            reader.readLines().drop(1).forEach { line ->
+                                val tokens = line.split(",")
+                                if (tokens.size == 5) {
+                                    val item = Item(tokens[0], tokens[1].toDouble(), tokens[2].toDouble(), tokens[3].toDouble(), tokens[4].toDouble())
+                                    itemList.add(item)
+                                }
+                            }
+                            // Notify the adapter that the data set has changed
+                            itemAdapter?.notifyDataSetChanged()
+
+                            // Update the total TextView
+                            val totalTextView: TextView = findViewById(R.id.textViewTotal)
+                            val totaltotal = calculateTotalTotal(itemList)
+                            totalTextView.text = totaltotal
+                        }
+                    }
+                } catch (e: IOException) {
+                    // Handle the exception
+                    Log.e("MainActivity", "Error reading CSV file", e)
+                    // Show an error message to the user
+                    AlertDialog.Builder(this)
+                        .setTitle("Error")
+                        .setMessage("Invalid file format. Please select a valid CSV file.")
+                        .setPositiveButton("OK", null)
+                        .show()
+                }
+
+            }
+        }
+
+        buttonImport.setOnClickListener {
+            openDocument.launch(arrayOf("*/*"))
         }
     }
 
@@ -386,6 +452,21 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
+    }
+
+    // Define the result launcher for creating a file
+    private val createFileLauncher = registerForActivityResult(CreateDocument("text/csv")) { uri ->
+        if (uri != null) {
+            // Write your data to the uri
+            contentResolver.openOutputStream(uri)?.bufferedWriter()?.use { writer ->
+                // Write the header
+                writer.append("Item Name,Price,Width,Total Sq Meters,Total Price\n")
+                // Write each item
+                itemList.forEach { item ->
+                    writer.append("${item.itemName},${item.priceInMeters},${item.width},${item.totalSqMeters},${item.totalPrice}\n")
+                }
+            }
+        }
     }
 
 }
