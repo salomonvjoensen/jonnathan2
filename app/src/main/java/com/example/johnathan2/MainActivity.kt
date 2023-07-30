@@ -346,7 +346,7 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                             if (header != "Item Name,Price,Width,Total Sq Meters,Total Price") {
                                 throw IOException("Invalid file format")
                             }
-                            reader.readLines().drop(1).forEach { line ->
+                            reader.forEachLine { line ->
                                 val tokens = line.split(",")
                                 if (tokens.size == 5) {
                                     val item = Item(tokens[0], tokens[1].toDouble(), tokens[2].toDouble(), tokens[3].toDouble(), tokens[4].toDouble())
