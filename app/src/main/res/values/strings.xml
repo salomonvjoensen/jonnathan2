@@ -3,7 +3,6 @@
     <string name="buttonExport">EXPORT</string>
     <string name="buttonImport">IMPORT</string>
     <string name="buttonEmpty">EMPTY</string>
-    <string name="textViewTtotal">"Total: "</string>
     <string name="textViewResult">Result:</string>
     <string name="buttonChange">Change</string>
     <string name="buttonCalculate">Calculate</string>
@@ -16,4 +15,5 @@
     <string name="EditTextItemName">Item name</string>
     <string name="textViewSubtitle">de le compagnon Jonathan 🔨</string>
     <string name="textViewTitle">Calculateur</string>
+    <string name="textViewTotal">"Total: "</string>
 </resources>

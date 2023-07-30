@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    android:orientation="vertical"
     android:importantForAutofill="noExcludeDescendants">
 
     <TextView
         android:id="@+id/textViewTitle"
-        android:layout_width="390dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/textViewTitle"
         android:textAlignment="center"
@@ -18,190 +17,164 @@
 
     <TextView
         android:id="@+id/textViewSubtitle"
-        android:layout_width="390dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/textViewSubtitle"
         android:textAlignment="center"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:layout_below="@id/textViewTitle" />
 
     <EditText
         android:id="@+id/editItemName"
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:autofillHints="name"
         android:hint="@string/EditTextItemName"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editItemName" />
+        android:layout_below="@id/textViewSubtitle" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/editTextPrice"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_below="@id/editItemName"
+        android:layout_marginTop="-1dp"
+        android:hint="@string/editTextPrice"
+        android:inputType="numberDecimal" />
 
-        <EditText
-            android:id="@+id/editTextPrice"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:hint="@string/editTextPrice"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editItemName" />
-
-        <TextView
-            android:id="@+id/textViewPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/textViewPrice"
-            android:textSize="18sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/editTextTotalSq"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_below="@id/editTextWood"
+        android:layout_marginTop="0dp"
+        android:hint="@string/editTextTotalSquareMeters"
+        android:inputType="numberDecimal" />
 
-        <EditText
-            android:id="@+id/editTextWood"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:hint="@string/editTextWidthInCm"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTextPrice" />
-
-        <TextView
-            android:id="@+id/textViewWood"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/textViewCm"
-            android:textSize="18sp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <EditText
-            android:id="@+id/editTextTotalSq"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:hint="@string/editTextTotalSquareMeters"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTextWood" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/textViewAmount"
-            android:textSize="18sp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="385dp"
+    <EditText
+        android:id="@+id/editTextWood"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_below="@id/editTextPrice"
+        android:layout_marginTop="0dp"
+        android:hint="@string/editTextWidthInCm"
+        android:inputType="numberDecimal" />
 
-        <Button
-            android:id="@+id/buttonCalculate"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonCalculate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTextTotalSq"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="57dp"/>
+    <TextView
+        android:id="@+id/textViewPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_alignTop="@id/editTextPrice"
+        android:layout_alignBottom="@id/editTextPrice"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/textViewPrice"
+        android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/buttonChange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonChange"
-            android:visibility="invisible"/>
+    <TextView
+        android:id="@+id/textViewWood"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:layout_alignTop="@id/editTextWood"
+        android:layout_alignBottom="@id/editTextWood"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/textViewCm"
+        android:textSize="18sp" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textViewAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:layout_alignTop="@id/editTextTotalSq"
+        android:layout_alignBottom="@id/editTextTotalSq"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="26dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/textViewAmount"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/buttonCalculate"
+        android:layout_width="296dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextTotalSq"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="-1dp"
+        android:text="@string/buttonCalculate" />
+
+    <Button
+        android:id="@+id/buttonChange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/buttonCalculate"
+        android:layout_alignBottom="@id/buttonCalculate"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/buttonCalculate"
+        android:text="@string/buttonChange"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/textViewResult"
-        android:layout_width="348dp"
-        android:layout_height="46dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/textViewResult"
         android:textSize="20sp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonCalculate" />
+        android:layout_below="@id/buttonCalculate" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="0dp"
+        android:layout_above="@+id/linearLayoutButtons"
+        android:layout_below="@id/textViewResult"
+        android:scrollbars="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:scrollbars="vertical"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            app:barrierAllowsGoneWidgets="false"
-            app:layout_constrainedHeight="true"
-            app:layout_constraintBottom_toTopOf="@+id/textViewTotal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.492"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textViewTotal"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/textViewTtotal"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recyclerView" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textViewTotal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textViewTotal"
+        android:textSize="30sp"
+        android:layout_above="@id/linearLayoutButtons" />
 
     <LinearLayout
-        android:layout_width="385dp"
+        android:id="@+id/linearLayoutButtons"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/buttonEmptyList"
             android:text="@string/buttonEmpty"
-            android:layout_width="120dp"
-            android:layout_height="match_parent">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
-        </Button>
         <Button
             android:id="@+id/buttonImport"
             android:text="@string/buttonImport"
-            android:layout_width="120dp"
-            android:layout_height="match_parent">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
-        </Button>
         <Button
             android:id="@+id/buttonExport"
             android:text="@string/buttonExport"
-            android:layout_width="120dp"
-            android:layout_height="match_parent">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
-        </Button>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
