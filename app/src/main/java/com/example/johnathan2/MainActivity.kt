@@ -44,12 +44,6 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
     private var itemAdapter: ItemAdapter? = null
     private var selectedItemIndex: Int? = null
 
-    companion object {
-        private const val CREATE_FILE_REQUEST_CODE = 1
-        private const val OPEN_FILE_REQUEST_CODE = 2
-        const val OPEN_DOCUMENT_REQUEST_CODE = 1
-    }
-
     override fun onItemMove(item: Item, fromPosition: Int, toPosition: Int) {
         // Handle item move
     }
