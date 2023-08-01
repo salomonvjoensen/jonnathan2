@@ -17,3 +17,4 @@ local.properties
 /app/release/jonathan.apk
 /app/release/output-metadata.json
 /signedkeyforjonathan.jks
+/private_key.pepk
