@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Jonathan</string>
-    <string name="buttonExport">EXPORT</string>
+    <string name="buttonExport">EXPORT 📤</string>
     <string name="buttonImport">IMPORT</string>
-    <string name="buttonEmpty">EMPTY</string>
+    <string name="buttonEmpty">EMPTY 🗑</string>
     <string name="textViewResult">Result:</string>
     <string name="buttonChange">Change</string>
     <string name="buttonCalculate">Calculate</string>
