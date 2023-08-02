@@ -357,6 +357,9 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
                             totalTextView.text = totaltotal
                         }
                     }
+
+                    // Save the the list into the sharedPreference memory after loading file.
+                    sharedPreferencesManager.saveItemList(itemList)
                 } catch (e: IOException) {
                     // Handle the exception
                     Log.e("MainActivity", "Error reading CSV file", e)
