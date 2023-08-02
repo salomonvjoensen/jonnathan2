@@ -1,4 +1,4 @@
-package com.example.johnathan2.ui.theme
+package com.jonathancalculator.johnathan2.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

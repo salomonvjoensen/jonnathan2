@@ -1,4 +1,4 @@
-package com.example.johnathan2
+package com.jonathancalculator.johnathan2
 
 import android.content.Context
 import com.google.gson.Gson

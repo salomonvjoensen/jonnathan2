@@ -1,4 +1,4 @@
-package com.example.johnathan2
+package com.jonathancalculator.johnathan2
 
 import android.app.AlertDialog
 import androidx.activity.ComponentActivity
@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.jonathancalculator.johnathan2.R
 import java.io.IOException
 import java.util.Collections
 import kotlin.math.round

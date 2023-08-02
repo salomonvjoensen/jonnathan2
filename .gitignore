@@ -18,3 +18,12 @@ local.properties
 /app/release/output-metadata.json
 /signedkeyforjonathan.jks
 /private_key.pepk
+/encryption_public_key.pem
+/logo.html
+/logo.png
+/logo.svg
+/logobig.png
+/logobig.svg
+/pepk.jar
+/Screenshot_20230802-155022.png
+/Screenshot_20230802-155411.png

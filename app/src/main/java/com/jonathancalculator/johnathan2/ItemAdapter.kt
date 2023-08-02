@@ -1,4 +1,4 @@
-package com.example.johnathan2
+package com.jonathancalculator.johnathan2
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.jonathancalculator.johnathan2.R
 import java.util.Collections
 
 interface ItemTouchHelperAdapter {
@@ -13,8 +14,8 @@ interface ItemTouchHelperAdapter {
 }
 
 class ItemAdapter(
-        private val items: MutableList<Item>,
-        private val listener: OnItemClickListener
+    private val items: MutableList<Item>,
+    private val listener: OnItemClickListener
     ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(), ItemTouchHelperAdapter {
 
 
