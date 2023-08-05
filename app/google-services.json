@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "609581735130",
+    "project_id": "jonathan-s-calculator",
+    "storage_bucket": "jonathan-s-calculator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:609581735130:android:7b906368f431d5f6ad99e3",
+        "android_client_info": {
+          "package_name": "com.jonathancalculator.johnathan2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "609581735130-47n1bbnjq116e9rql12jbagrnh5jdqfs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkSKuseCTwVHEFboGxCM1lzplrKuCviFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "609581735130-47n1bbnjq116e9rql12jbagrnh5jdqfs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
