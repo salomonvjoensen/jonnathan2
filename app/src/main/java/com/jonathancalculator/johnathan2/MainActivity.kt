@@ -14,6 +14,7 @@ import android.util.Log
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Color
+import android.text.Html
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -100,7 +101,9 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
                 // Set the result in the TextView
                 resultTextView.text =
-                    "Result: ${"%.2f".format(item.priceInMeters / (item.width / 100))} DKK\nTotal: ${"%.2f".format(item.totalPrice)} DKK"
+                    "Result: ${"%.2f".format(item.priceInMeters / (item.width / 100))}" +
+                            " DKK/m²\nTotal: ${"%.2f".format(item.totalPrice)} DKK, " +
+                            "${item.totalSqMeters} m²"
             }
 
             override fun onItemMove(item: Item, fromPosition: Int, toPosition: Int) {
@@ -243,7 +246,8 @@ class MainActivity : ComponentActivity(), ItemAdapter.OnItemClickListener {
 
             // Set the result in the TextView
             resultTextView.text =
-                "Result: ${"%.2f".format(result)} DKK\nTotal: ${"%.2f".format(total)} DKK"
+                "Result: ${"%.2f".format(result)} DKK/m²\nTotal: ${"%.2f".format(total)} DKK, ${totalSqMeters} m²"
+                //"Result: ${"%.2f".format(result)} DKK\nTotal: ${"%.2f".format(total)} DKK"
 
             // Add the new item to the list
             item = Item(itemNameText, price, wood, totalSqMeters, round(total * 100) / 100)

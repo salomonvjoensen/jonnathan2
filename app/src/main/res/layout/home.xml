@@ -26,38 +26,46 @@
 
     <EditText
         android:id="@+id/editItemName"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autofillHints="name"
         android:hint="@string/EditTextItemName"
         android:inputType="text"
-        android:layout_below="@id/textViewSubtitle" />
+        android:layout_below="@id/textViewSubtitle"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/textViewPrice"/>
 
     <EditText
         android:id="@+id/editTextPrice"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/editItemName"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/textViewPrice"
         android:layout_marginTop="-1dp"
         android:hint="@string/editTextPrice"
         android:inputType="numberDecimal" />
 
     <EditText
-        android:id="@+id/editTextTotalSq"
-        android:layout_width="300dp"
+        android:id="@+id/editTextWood"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextWood"
+        android:layout_below="@id/editTextPrice"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/textViewPrice"
         android:layout_marginTop="0dp"
-        android:hint="@string/editTextTotalSquareMeters"
+        android:hint="@string/editTextWidthInCm"
         android:inputType="numberDecimal" />
 
     <EditText
-        android:id="@+id/editTextWood"
-        android:layout_width="300dp"
+        android:id="@+id/editTextTotalSq"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextPrice"
+        android:layout_below="@id/editTextWood"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/textViewPrice"
         android:layout_marginTop="0dp"
-        android:hint="@string/editTextWidthInCm"
+        android:hint="@string/editTextTotalSquareMeters"
         android:inputType="numberDecimal" />
 
     <TextView
@@ -67,9 +75,10 @@
         android:layout_alignTop="@id/editTextPrice"
         android:layout_alignBottom="@id/editTextPrice"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="31dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="10dp"
+        android:gravity="bottom"
         android:text="@string/textViewPrice"
         android:textSize="18sp" />
 
@@ -81,30 +90,33 @@
         android:layout_alignBottom="@id/editTextWood"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="14dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="bottom"
         android:text="@string/textViewCm"
         android:textSize="18sp" />
 
     <TextView
         android:id="@+id/textViewAmount"
         android:layout_width="wrap_content"
-        android:layout_height="26dp"
+        android:layout_height="35dp"
         android:layout_alignTop="@id/editTextTotalSq"
         android:layout_alignBottom="@id/editTextTotalSq"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="bottom"
         android:text="@string/textViewAmount"
         android:textSize="18sp" />
 
     <Button
         android:id="@+id/buttonCalculate"
-        android:layout_width="296dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/editTextTotalSq"
         android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/buttonChange"
         android:layout_marginStart="1dp"
         android:layout_marginTop="-1dp"
         android:text="@string/buttonCalculate" />
@@ -118,7 +130,8 @@
         android:layout_marginStart="6dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
-        android:layout_toEndOf="@+id/buttonCalculate"
+        android:layout_marginEnd="6dp"
+        android:layout_alignParentEnd="true"
         android:text="@string/buttonChange"
         android:visibility="invisible" />
 
@@ -136,6 +149,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/textViewTotal"
         android:layout_below="@id/textViewResult"
+        android:paddingTop="3dp"
+        android:background="@drawable/rounded_corners_with_color"
         android:scrollbarAlwaysDrawVerticalTrack="true"
         android:scrollbars="vertical" />
 

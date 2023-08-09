@@ -3,10 +3,10 @@
     <string name="buttonExport">EXPORT 📤</string>
     <string name="buttonImport">IMPORT</string>
     <string name="buttonEmpty">EMPTY 🗑</string>
-    <string name="textViewResult">Result:</string>
+    <string name="textViewResult">Result:\nTotal:</string>
     <string name="buttonChange">Change</string>
     <string name="buttonCalculate">Calculate</string>
-    <string name="textViewAmount">amount</string>
+    <string name="textViewAmount">m<sup>2</sup></string>
     <string name="editTextTotalSquareMeters">Total square meters</string>
     <string name="textViewCm">cm</string>
     <string name="editTextWidthInCm">Width in cm</string>
